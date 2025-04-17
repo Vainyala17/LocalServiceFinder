@@ -24,11 +24,6 @@ class _HomePageState extends State<HomePage> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Local Service Finder",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            SizedBox(height: 8),
             Container(
               height: 40,
               padding: EdgeInsets.symmetric(horizontal: 10),
