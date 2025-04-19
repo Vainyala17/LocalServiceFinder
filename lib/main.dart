@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:local_service_finder/Authentication/auth_service.dart';
-import 'package:local_service_finder/Authentication/login_screen.dart';
-import 'package:local_service_finder/Authentication/register_screen.dart';
+import 'package:local_service_finder/Authentication/AuthService.dart';
+import 'package:local_service_finder/Authentication/LoginScreen.dart';
+import 'package:local_service_finder/Authentication/RegisterScreen.dart';
 import 'HomePage.dart'; // Make sure this file exists
 
 void main() async {
