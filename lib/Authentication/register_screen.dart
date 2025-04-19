@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'auth_service.dart';
 import 'login_screen.dart';
 
@@ -119,10 +120,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Logo or illustration
-                    Icon(
-                      Icons.person_add_rounded,
-                      size: 80,
-                      color: Theme.of(context).primaryColor,
+                    Center(
+                      child: Image.asset(
+                        'assets/Regi.png', // Add your logo to assets
+                        height: 120,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     const SizedBox(height: 32),
 
@@ -185,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                           ),
                           onPressed: () {
                             setState(() {
@@ -223,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                           ),
                           onPressed: () {
                             setState(() {
@@ -255,6 +258,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ElevatedButton(
                       onPressed: _isLoading ? null : _register,
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50),
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -271,7 +276,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       )
                           : const Text(
-                        "REGISTER",
+                        "Register",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -295,9 +300,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               MaterialPageRoute(builder: (context) => const LoginScreen()),
                             );
                           },
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Text(
+                            "Sign In",
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF4CAF50),
+                            ),
                           ),
                         ),
                       ],
