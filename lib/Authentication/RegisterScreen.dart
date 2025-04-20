@@ -41,17 +41,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (user != null) {
           // Show success message
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Registration successful! Please log in.'),
-                backgroundColor: Colors.green,
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => Dialog(
+                backgroundColor: const Color(0xFFF3FBEF),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF4CAF50), // Green background
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 60,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "SUCCESS",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4CAF50),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      child: Text(
+                        "Congratulations, your account has been successfully created.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14, color: Colors.black87),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF4CAF50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context); // Close dialog
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        );
+                      },
+                      child: const Text("Continue", style: TextStyle(color: Colors.white)),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
-            );
-
-            // Navigate to login screen
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen())
             );
           }
         }
@@ -94,25 +145,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        title: Text(
-          "Create Account",
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+
+        // title: Text(
+        //   "Create Account",
+        //   style: TextStyle(
+        //     color: Theme.of(context).primaryColor,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
       ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(22.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -122,8 +175,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     // Logo or illustration
                     Center(
                       child: Image.asset(
-                        'assets/Regi.png', // Add your logo to assets
-                        height: 120,
+                        'assets/sign.png', // Add your logo to assets
+                        height: 150,
                         fit: BoxFit.contain,
                       ),
                     ),

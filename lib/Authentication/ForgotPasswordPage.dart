@@ -79,6 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       // appBar: AppBar(
       //   title: const Text('Forgot Password?'),
       //   elevation: 0,
@@ -98,11 +99,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   Center(
                     child: Image.asset(
                       'assets/Reset.png', // Add your logo to assets
-                      height: 120, fit: BoxFit.contain,
+                      height: 150, fit: BoxFit.contain,
                     ),
                   ),
 
-                  const SizedBox(height: 30),  // Reduced spacing
+                  const SizedBox(height: 50),  // Reduced spacing
 
                   // Heading text
                   Text(
@@ -155,7 +156,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     },
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 60),
 
                   // Submit button
                   ElevatedButton(
@@ -187,7 +188,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
                   // Back to login
                   TextButton(

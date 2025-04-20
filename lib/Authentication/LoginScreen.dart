@@ -65,15 +65,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Logo
                 Center(
                   child: Image.asset(
-                    'assets/Login.png', // Add your logo to assets
-                    height: 120,
+                    'assets/loginn.png', // Add your logo to assets
+                    height: 150,
+
                     fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
                 // Welcome text
                 Text(
                   "Welcome back",
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
@@ -83,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 Text(
                   "Sign in to continue",
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -205,25 +208,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
                 // Or continue with
-                Row(
-                  children: [
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFFE5E5E5),
-                        thickness: 1,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        color: Color(0xFFE5E5E5),
-                        thickness: 1,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 // Register link
                 Center(
                   child: RichText(

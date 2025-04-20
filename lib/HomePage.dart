@@ -18,28 +18,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.greenAccent, // AppBar background color
-        titleSpacing: 16.0,
-        toolbarHeight: 100, // Set fixed height
+        titleSpacing: 17.0,
+        toolbarHeight: 60, // Set fixed height
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: 40,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.grey.shade300),
               ),
               child: Row(
                 children: [
                   Icon(Icons.search, color: Colors.grey),
-                  SizedBox(width: 5),
+                  SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: "Search Services...",
+                        hintText: "Search....",
                         border: InputBorder.none,
                       ),
                     ),
@@ -62,17 +63,53 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Promotional Banner
+            // Promotional Banner with Background Image
             Container(
               height: 150,
               decoration: BoxDecoration(
-                color: Colors.greenAccent,
                 borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Text(
-                  "Get 20% Off on First Service!",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                image: DecorationImage(
+                  image: AssetImage('assets/Promo.png'), // <- path to your uploaded image
+                  fit: BoxFit.cover,
                 ),
+              ),
+              padding: EdgeInsets.all(16),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Get 20% Off",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "on First Service!",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade400,
+                      borderRadius: BorderRadius.circular(20),
+
+                    ),
+                    child: Text(
+                      "Book Now",
+                      style: TextStyle(color: Colors.black,),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 20),
