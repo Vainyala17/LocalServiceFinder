@@ -1,8 +1,96 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Logout'),
+        content: Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Cancel
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              // Your logout logic here (e.g., FirebaseAuth.instance.signOut())
+              // After logout, navigate to login screen
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            child: Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildListTile({required IconData icon, required String title, VoidCallback? onTap}) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.green),
+      title: Text(title, style: TextStyle(fontSize: 16)),
+      trailing: Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: onTap,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Profile Page"));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header/Profile Info
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundImage: AssetImage('assets/Profile.png'), // Your asset/profile image
+                  ),
+                  SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("John Doe", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 4),
+                      Text("john.doe@email.com", style: TextStyle(color: Colors.black87)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // List Sections
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                children: [
+                  buildListTile(icon: Icons.person, title: "My Details", onTap: () {}),
+                  buildListTile(icon: Icons.shopping_bag, title: "Orders", onTap: () {}),
+                  buildListTile(icon: Icons.location_on, title: "Delivery Address", onTap: () {}),
+                  buildListTile(icon: Icons.payment, title: "Payment Methods", onTap: () {}),
+                  buildListTile(icon: Icons.notifications, title: "Notifications", onTap: () {}),
+                  buildListTile(icon: Icons.help_outline, title: "Help & Support", onTap: () {}),
+                  SizedBox(height: 20),
+                  Divider(height: 1, color: Colors.grey),
+                  ListTile(
+                    leading: Icon(Icons.logout, color: Colors.red),
+                    title: Text("Logout", style: TextStyle(color: Colors.red)),
+                    onTap: () => _showLogoutDialog(context),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

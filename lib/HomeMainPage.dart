@@ -67,7 +67,7 @@ class HomeMainPage extends StatelessWidget {
                   CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.green.shade100,
-                    child: Icon(services[index]['icon'], size: 30, color: Colors.green.shade700),
+                    child: Icon(services[index]['icon'], size: 30, color: Colors.green.shade400),
                   ),
                   SizedBox(height: 5),
                   Text(services[index]['title'], style: TextStyle(fontSize: 14)),
@@ -90,7 +90,7 @@ class HomeMainPage extends StatelessWidget {
                   width: 200,
                   margin: EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
-                    color: Colors.greenAccent,
+                    color: Colors.green.shade400,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
