@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Local Service Finder',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade400),
         useMaterial3: true,
       ),
-      initialRoute: '/login', // Start with login screen
+      initialRoute: '/home', // Start with login screen
       routes: {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
