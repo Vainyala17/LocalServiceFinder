@@ -5,7 +5,9 @@ import 'NotificationPage.dart';
 import 'OrdersPage.dart';
 import 'ProfilePage.dart';
 import 'HomeMainPage.dart';
+import 'package:provider/provider.dart';
 import 'CustomBottomNavBar.dart';
+import 'notification_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<NotificationProvider>(context, listen: false).fetchNotifications();
+  }
+
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [

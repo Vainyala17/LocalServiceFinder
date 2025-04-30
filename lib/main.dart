@@ -4,11 +4,22 @@ import 'package:local_service_finder/Authentication/AuthService.dart';
 import 'package:local_service_finder/Authentication/LoginScreen.dart';
 import 'package:local_service_finder/Authentication/RegisterScreen.dart';
 import 'HomePage.dart'; // Make sure this file exists
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'notification_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
