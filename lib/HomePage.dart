@@ -27,11 +27,12 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomeMainPage(),
-    OrdersPage(),
-    ChatPage(),
-    ProfilePage(),
+    HomeMainPage(),         // Index 0
+    OrdersPage(),           // Index 1
+    ChatPage(),             // Index 2
+    ProfilePage(),          // Index 3
   ];
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: Colors.green.shade400,
         titleSpacing: 17.0,
         toolbarHeight: 60,
         title: Container(

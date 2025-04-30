@@ -97,7 +97,7 @@ class NotificationPage extends StatelessWidget {
       backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.green.shade400,
         centerTitle: false,
         title: const Text(
           'Notifications',
@@ -153,7 +153,7 @@ class NotificationPage extends StatelessWidget {
                     .toList();
 
                 if (notifications.isEmpty) {
-                  return const Center(child: Text('No notifications found.'));
+                  return _buildExampleNotifications();
                 }
 
                 return ListView.builder(
@@ -222,17 +222,17 @@ class NotificationPage extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF2E5BFF).withOpacity(0.1) : Colors.transparent,
+          color: isActive ? const Color(0xFF4CAF50).withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isActive ? const Color(0xFF2E5BFF) : Colors.transparent,
+            color: isActive ? const Color(0xFF4CAF50) : Colors.transparent,
             width: 1,
           ),
         ),
         child: Text(
           title,
           style: TextStyle(
-            color: isActive ? const Color(0xFF2E5BFF) : const Color(0xFF8F8F8F),
+            color: isActive ? const Color(0xFF4CAF50) : const Color(0xFF8F8F8F),
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
             fontSize: 14,
           ),
@@ -243,6 +243,7 @@ class NotificationPage extends StatelessWidget {
 
   Widget _buildNotificationCard(BuildContext context, Map<String, dynamic> data, String docId) {
     final bool isUnread = data['isUnread'] ?? false;
+    bool isFavorite = data['isFavorite'] ?? false;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -268,7 +269,7 @@ class NotificationPage extends StatelessWidget {
                 height: 8,
                 margin: const EdgeInsets.only(top: 8, right: 8),
                 decoration: const BoxDecoration(
-                  color: Color(0xFF2E5BFF),
+                  color: Color(0xFF4CAF50),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -323,20 +324,27 @@ class NotificationPage extends StatelessWidget {
                       ),
                       Row(
                         children: [
+                          // Favorite button that toggles between heart border and filled heart
                           _buildActionButton(
-                            Icons.favorite_border,
-                            const Color(0xFF8F8F8F),
-                                () {},
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            isFavorite ? Colors.red : const Color(0xFF8F8F8F),
+                                () {
+                              // Update favorite status
+                              FirebaseFirestore.instance
+                                  .collection('Notification')
+                                  .doc(docId)
+                                  .update({
+                                'isFavorite': !isFavorite,
+                              });
+                            },
                           ),
                           const SizedBox(width: 16),
+                          // Close button that shows a confirmation dialog before deleting
                           _buildActionButton(
                             Icons.close,
                             const Color(0xFFFF3B30),
                                 () {
-                              FirebaseFirestore.instance
-                                  .collection('notifications')
-                                  .doc(docId)
-                                  .delete();
+                              _showDeleteConfirmationDialog(context, docId);
                             },
                           ),
                         ],
@@ -351,7 +359,36 @@ class NotificationPage extends StatelessWidget {
       ),
     );
   }
-
+// Confirmation dialog for deletion
+  void _showDeleteConfirmationDialog(BuildContext context, String docId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Notification'),
+          content: Text('Are you sure you want to delete this notification?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('Notification')
+                    .doc(docId)
+                    .delete();
+                Navigator.of(context).pop();
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Widget _buildActionButton(IconData icon, Color color, VoidCallback onPressed) {
     return InkWell(
       onTap: onPressed,

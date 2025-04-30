@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'HelpSupportPage.dart';
+import 'MyDetailsPage.dart';
+import 'NotificationPage.dart';
+import 'OrdersPage.dart';
+import 'SettingsPage.dart';
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -72,12 +78,48 @@ class ProfilePage extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 children: [
-                  buildListTile(icon: Icons.person, title: "My Details", onTap: () {}),
-                  buildListTile(icon: Icons.shopping_bag, title: "Orders", onTap: () {}),
-                  buildListTile(icon: Icons.location_on, title: "Delivery Address", onTap: () {}),
-                  buildListTile(icon: Icons.payment, title: "Payment Methods", onTap: () {}),
-                  buildListTile(icon: Icons.notifications, title: "Notifications", onTap: () {}),
-                  buildListTile(icon: Icons.help_outline, title: "Help & Support", onTap: () {}),
+                  buildListTile(
+                    icon: Icons.person,
+                    title: "My Details",
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => MyDetailsPage()));
+                    },
+                  ),
+                  buildListTile(
+                    icon: Icons.shopping_bag,
+                    title: "Orders",
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => OrdersPage()));
+                    },
+                  ),
+                  buildListTile(
+                    icon: Icons.location_on,
+                    title: "Delivery Address",
+                    // onTap: () {
+                    //   Navigator.push(context, MaterialPageRoute(builder: (_) => DeliveryAddressPage()));
+                    // },
+                  ),
+                  buildListTile(
+                    icon: Icons.settings,
+                    title: "Settings",
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()));
+                    },
+                  ),
+                  buildListTile(
+                    icon: Icons.notifications,
+                    title: "Notifications",
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationPage(notificationType: '',)));
+                    },
+                  ),
+                  buildListTile(
+                    icon: Icons.help_outline,
+                    title: "Help & Support",
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => HelpSupportPage()));
+                    },
+                  ),
                   SizedBox(height: 20),
                   Divider(height: 1, color: Colors.grey),
                   ListTile(
@@ -86,6 +128,7 @@ class ProfilePage extends StatelessWidget {
                     onTap: () => _showLogoutDialog(context),
                   ),
                 ],
+
               ),
             ),
           ],

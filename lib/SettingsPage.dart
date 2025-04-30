@@ -20,11 +20,10 @@ class SettingsPage extends StatelessWidget {
           'Settings',
           style: TextStyle(
             fontSize: 22,
-            color: Colors.purple,
+            color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -100,7 +99,7 @@ class SettingsPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.purple, fontSize: 15),
+        style: const TextStyle(color: Colors.green, fontSize: 15),
       ),
     );
   }
