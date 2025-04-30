@@ -84,6 +84,15 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid;
+
+    if (userId == null) {
+      return const Scaffold(
+        body: Center(child: Text('User not logged in')),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
@@ -137,30 +146,21 @@ class NotificationPage extends StatelessWidget {
         children: [
           _buildTabSelector(context),
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('notifications')
-                  .where('type', isEqualTo: notificationType)
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                // Add example notification if no data or still loading
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    !snapshot.hasData ||
-                    snapshot.data!.docs.isEmpty) {
+            child: Consumer<NotificationProvider>(
+              builder: (context, provider, child) {
+                final notifications = provider.notifications
+                    .where((n) => n['type'] == notificationType)
+                    .toList();
 
-                  return _buildExampleNotifications();
+                if (notifications.isEmpty) {
+                  return const Center(child: Text('No notifications found.'));
                 }
 
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  itemCount: snapshot.data!.docs.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 12),
+                return ListView.builder(
+                  itemCount: notifications.length,
                   itemBuilder: (context, index) {
-                    final doc = snapshot.data!.docs[index];
-                    final data = doc.data() as Map<String, dynamic>;
-
-                    return _buildNotificationCard(context, data, doc.id);
+                    final notif = notifications[index];
+                    return _buildNotificationCard(context, notif, notif['id']);
                   },
                 );
               },

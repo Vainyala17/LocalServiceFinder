@@ -18,8 +18,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<NotificationProvider>(context, listen: false).fetchNotifications();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotificationProvider>(context, listen: false).fetchNotifications();
+    });
   }
+
 
   int _selectedIndex = 0;
 

@@ -10,8 +10,12 @@ import 'notification_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(); // Must come before any Firebase call
+
+  // Optionally handle null safely
+  final User? user = FirebaseAuth.instance.currentUser;
+  final String? currentUserId = user?.uid;
+
   runApp(
     MultiProvider(
       providers: [
@@ -21,6 +25,7 @@ void main() async {
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
