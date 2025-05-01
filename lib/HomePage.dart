@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'ChatPage.dart';
+import 'FavouritePage.dart';
 import 'NotificationPage.dart';
 import 'OrdersPage.dart';
 import 'ProfilePage.dart';
@@ -29,8 +30,10 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     HomeMainPage(),         // Index 0
     OrdersPage(),           // Index 1
-    ChatPage(),             // Index 2
-    ProfilePage(),          // Index 3
+    ChatPage(),
+
+    ProfilePage(),
+    FavouritePage(),// Index 3
   ];
 
 
@@ -85,7 +88,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _pages[_selectedIndex], // ← Swaps between Home, Orders, Chat, Profile
+      body: (_selectedIndex >= 0 && _selectedIndex < _pages.length)
+          ? _pages[_selectedIndex]
+          : _pages[0], // ← Swaps between Home, Orders, Chat, Profile
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

@@ -10,8 +10,8 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
+        backgroundColor: Colors.green.shade400,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.pop(context),
@@ -72,7 +72,7 @@ class SettingsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Logins", style: TextStyle(color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                Text("Logins", style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 _buildLinkText("Add or switch accounts"),
                 _buildLinkText("Log out"),
