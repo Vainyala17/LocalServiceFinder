@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:local_service_finder/HomeMainPage.dart';
-import '../HomePage.dart';
+import 'package:local_service_finder/Home/HomeMainPage.dart';
+import '../Home/HomePage.dart';
 import 'AuthService.dart';
 import 'LoginScreen.dart';
 

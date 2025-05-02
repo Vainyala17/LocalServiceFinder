@@ -3,10 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:local_service_finder/Authentication/AuthService.dart';
 import 'package:local_service_finder/Authentication/LoginScreen.dart';
 import 'package:local_service_finder/Authentication/RegisterScreen.dart';
-import 'HomePage.dart'; // Make sure this file exists
+import 'Home/HomePage.dart'; // Make sure this file exists
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'notification_provider.dart';
+import 'Notifications/notification_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

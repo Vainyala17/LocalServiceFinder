@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'HelpSupportPage.dart';
-import 'MyDetailsPage.dart';
-import 'NotificationPage.dart';
+import '../HelpSupportPage.dart';
+import '../MyDetailsPage.dart';
+import '../Notifications/NotificationPage.dart';
 import 'OrdersPage.dart';
-import 'SettingsPage.dart';
+import '../SettingsPage.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

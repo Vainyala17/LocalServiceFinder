@@ -1,14 +1,14 @@
 
 import 'package:flutter/material.dart';
-import 'ChatPage.dart';
-import 'FavouritePage.dart';
-import 'NotificationPage.dart';
-import 'OrdersPage.dart';
-import 'ProfilePage.dart';
+import '../BottomNavBar/ChatPage.dart';
+import '../BottomNavBar/FavouritePage.dart';
+import '../Notifications/NotificationPage.dart';
+import '../BottomNavBar/OrdersPage.dart';
+import '../BottomNavBar/ProfilePage.dart';
 import 'HomeMainPage.dart';
 import 'package:provider/provider.dart';
-import 'CustomBottomNavBar.dart';
-import 'notification_provider.dart';
+import '../BottomNavBar/CustomBottomNavBar.dart';
+import '../Notifications/notification_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
