@@ -1,5 +1,3 @@
-// lib/Search/SearchPage.dart
-
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -16,51 +14,163 @@ class _SearchPageState extends State<SearchPage> {
     'Scholarship',
     'Bank Form',
     'Health Registration',
+    'Aadhar Card',
+    'PAN Form',
+    'Driving License',
+    'Job Application',
+    'Hostel Form',
+    'Domicile Certificate',
   ];
 
   List<String> _filteredItems = [];
+  List<String> _recentSearches = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = _allItems;
+    _filteredItems = [];
+    _searchController.addListener(() {
+      _filterSearch(_searchController.text);
+    });
   }
 
   void _filterSearch(String query) {
-    final results = _allItems
-        .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    if (query.isEmpty) {
+      setState(() {
+        _filteredItems = [];
+      });
+    } else {
+      final results = _allItems
+          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      setState(() {
+        _filteredItems = results;
+      });
+    }
+  }
+
+  void _addToRecentSearches(String item) {
     setState(() {
-      _filteredItems = results;
+      _recentSearches.remove(item); // remove if already exists
+      _recentSearches.insert(0, item);
+      if (_recentSearches.length > 10) {
+        _recentSearches.removeLast(); // limit to last 10
+      }
+    });
+  }
+
+  void _removeRecentItem(String item) {
+    setState(() {
+      _recentSearches.remove(item);
     });
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSearchResults() {
+    return ListView.builder(
+      itemCount: _filteredItems.length,
+      itemBuilder: (context, index) {
+        final item = _filteredItems[index];
+        return ListTile(
+          title: Text(item),
+          onTap: () {
+            _addToRecentSearches(item);
+            Navigator.pop(context, item);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildRecentSearches() {
+    if (_recentSearches.isEmpty) {
+      return Center(child: Text('No recent searches'));
+    }
+    return ListView.builder(
+      itemCount: _recentSearches.length,
+      itemBuilder: (context, index) {
+        final item = _recentSearches[index];
+        return ListTile(
+          leading: Icon(Icons.history),
+          title: Text(item),
+          trailing: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () => _removeRecentItem(item),
+          ),
+          onTap: () {
+            _searchController.text = item;
+            _filterSearch(item);
+          },
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isSearching = _searchController.text.isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: "Search forms...",
-            border: InputBorder.none,
-          ),
-          onChanged: _filterSearch,
-        ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.green.shade400,
+        titleSpacing: 17.0,
+        toolbarHeight: 60,
+        title: Container(
+          height: 40,
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.search, color: Colors.black),
+              SizedBox(width: 8),
+              Expanded(
+                child: InkWell(
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchPage()),
+                    );
+                    if (result != null) {
+                      print("User searched: $result");
+                    }
+                  },
+                  child: IgnorePointer(
+                    child: TextField(
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        hintText: "Search....",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: ListView.builder(
-        itemCount: _filteredItems.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_filteredItems[index]),
-            onTap: () {
-              // You can return selected result back if needed
-              Navigator.pop(context, _filteredItems[index]);
-            },
-          );
-        },
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          // Hidden TextField for controlling search — no UI for it
+          Offstage(
+            offstage: true,
+            child: TextField(controller: _searchController),
+          ),
+          Expanded(
+            child: isSearching ? _buildSearchResults() : _buildRecentSearches(),
+          ),
+        ],
       ),
     );
   }
