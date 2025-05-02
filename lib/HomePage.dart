@@ -28,13 +28,13 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomeMainPage(),         // Index 0
-    OrdersPage(),           // Index 1
-    ChatPage(),
-
-    ProfilePage(),
-    FavouritePage(),// Index 3
+    HomeMainPage(),       // index 0 -> Home
+    OrdersPage(),         // index 1 -> Orders
+    ChatPage(),           // index 2 -> Chat
+    FavouritePage(),      // index 3 -> Favourite
+    ProfilePage(),        // index 4 -> Profile
   ];
+
 
 
   void _onItemTapped(int index) {

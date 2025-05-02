@@ -18,11 +18,11 @@ class CustomBottomNavBar extends StatelessWidget {
       selectedItemColor: Colors.green.shade400,
       unselectedItemColor: Colors.grey,
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Orders"),
-        BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favourite"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),          // index 0
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Orders"), // index 1
+        BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),          // index 2
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favourite"), // index 3
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),     // index 4
       ],
     );
   }

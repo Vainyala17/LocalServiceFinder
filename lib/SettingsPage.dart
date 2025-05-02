@@ -9,6 +9,7 @@ class SettingsPage extends StatelessWidget {
     final textColor = isDark ? Colors.white : Colors.black;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F7),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.green.shade400,
