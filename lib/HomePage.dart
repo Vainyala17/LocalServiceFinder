@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Row(
             children: [
-              Icon(Icons.search, color: Colors.grey),
+              Icon(Icons.search, color: Colors.black),
               SizedBox(width: 8),
               Expanded(
                 child: TextField(

@@ -84,6 +84,7 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String notificationType = 'general';
     final user = FirebaseAuth.instance.currentUser;
     final userId = user?.uid;
 
