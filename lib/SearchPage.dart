@@ -117,10 +117,7 @@ class _SearchPageState extends State<SearchPage> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.green.shade400,
-        titleSpacing: 17.0,
-        toolbarHeight: 60,
         title: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -134,24 +131,12 @@ class _SearchPageState extends State<SearchPage> {
               Icon(Icons.search, color: Colors.black),
               SizedBox(width: 8),
               Expanded(
-                child: InkWell(
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SearchPage()),
-                    );
-                    if (result != null) {
-                      print("User searched: $result");
-                    }
-                  },
-                  child: IgnorePointer(
-                    child: TextField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: "Search....",
-                        border: InputBorder.none,
-                      ),
-                    ),
+                child: TextField(
+                  controller: _searchController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: "Search...",
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -160,18 +145,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          // Hidden TextField for controlling search — no UI for it
-          Offstage(
-            offstage: true,
-            child: TextField(controller: _searchController),
-          ),
-          Expanded(
-            child: isSearching ? _buildSearchResults() : _buildRecentSearches(),
-          ),
-        ],
-      ),
+      body: isSearching ? _buildSearchResults() : _buildRecentSearches(),
     );
   }
 }
