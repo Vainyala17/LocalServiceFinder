@@ -57,7 +57,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
+                        builder: (context) => const LoginScreen(role: '', isLogin: true),
+                      ),
                     );
                   },
                   child: const Text(
@@ -208,7 +209,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
+                          builder: (context) => const LoginScreen(role: '', isLogin: true)),
                     );
                   },
                   child: Text(

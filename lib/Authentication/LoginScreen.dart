@@ -6,7 +6,14 @@ import 'AuthService.dart';
 import 'RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final String role;
+  final bool isLogin;
+
+  const LoginScreen({
+    Key? key,
+    required this.role,
+    required this.isLogin
+  }) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -27,7 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       User? user = await _auth.loginUser(emailController.text, passwordController.text);
       if (user != null) {
-        Navigator.pushReplacementNamed(context, '/home');
+        // Navigate based on role
+        if (widget.role == 'admin') {
+          Navigator.pushReplacementNamed(context, '/admin_home');
+        } else {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -50,10 +62,58 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void register() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      User? user = await _auth.registerUser(emailController.text, passwordController.text);
+      if (user != null) {
+        // Navigate based on role after registration
+        if (widget.role == 'admin') {
+          Navigator.pushReplacementNamed(context, '/admin_home');
+        } else {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Registration failed. Please try again."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: ${e.toString()}"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Dynamic colors based on role
+    Color primaryColor = widget.role == 'admin' ? const Color(0xFFFF9800) : const Color(0xFF4CAF50);
+    Color primaryColorLight = widget.role == 'admin' ? const Color(0xFFFFF3E0) : const Color(0xFFE8F5E8);
+
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.grey[600]),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -61,35 +121,70 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 60),
+                const SizedBox(height: 20),
+                // Role indicator
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: primaryColorLight,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          widget.role == 'admin' ? Icons.admin_panel_settings : Icons.person,
+                          color: primaryColor,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${widget.role.toUpperCase()} ${widget.isLogin ? 'LOGIN' : 'REGISTER'}',
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
                 // Logo
                 Center(
                   child: Image.asset(
                     'assets/loginn.png', // Add your logo to assets
-                    height: 150,
-
+                    height: 120,
                     fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 // Welcome text
-                Text(
-                  "Welcome back",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF333333),
+                Center(
+                  child: Text(
+                    widget.isLogin ? "Welcome back" : "Create Account",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF333333),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  "Sign in to continue",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF6E6E6E),
+                Center(
+                  child: Text(
+                    widget.isLogin
+                        ? "Sign in to your ${widget.role} account"
+                        : "Create your ${widget.role} account",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF6E6E6E),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -109,6 +204,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey[300]!),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: primaryColor, width: 2),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -127,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: passwordController,
                   obscureText: _obscurePassword,
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     labelText: "Password",
                     hintText: "Enter your password",
@@ -149,6 +248,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey[300]!),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: primaryColor, width: 2),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -161,38 +264,38 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 12),
-                // Forgot password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
-                      );
-                    },
-                    child: Text(
-                      "Forgot Password?",
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF4CAF50),
+                // Forgot password (only show for login)
+                if (widget.isLogin)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                        );
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: primaryColor,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 25),
-                // Login button
-
+                // Login/Register button
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: login,
+                    onPressed: widget.isLogin ? login : register,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4CAF50),
+                      backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -200,7 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     child: Text(
-                      "Login",
+                      widget.isLogin ? "Login" : "Register",
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -208,13 +311,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                // Or continue with
                 const SizedBox(height: 30),
-                // Register link
+                // Switch between login and register
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      text: "Don't have an account? ",
+                      text: widget.isLogin
+                          ? "Don't have an account? "
+                          : "Already have an account? ",
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         color: const Color(0xFF6E6E6E),
@@ -222,16 +326,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         WidgetSpan(
                           child: InkWell(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => RegisterScreen()),
-                            ),
+                            onTap: () {
+                              // Navigate back to auth selection or switch mode
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(
+                                    role: widget.role,
+                                    isLogin: !widget.isLogin,
+                                  ),
+                                ),
+                              );
+                            },
                             child: Text(
-                              "Sign Up",
+                              widget.isLogin ? "Sign Up" : "Sign In",
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF4CAF50),
+                                color: primaryColor,
                               ),
                             ),
                           ),

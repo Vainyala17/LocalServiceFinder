@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:local_service_finder/Authentication/AuthService.dart';
 import 'package:local_service_finder/Authentication/LoginScreen.dart';
 import 'package:local_service_finder/Authentication/RegisterScreen.dart';
+import 'package:local_service_finder/SplashScreen.dart';
 import 'Home/HomePage.dart'; // Make sure this file exists
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -38,10 +39,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade400),
         useMaterial3: true,
       ),
-      initialRoute: '/home', // Start with login screen
+      initialRoute: '/splash', // Start with login screen
       routes: {
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
+        '/splash':(context) => SplashScreen(),
+        '/login': (context) => LoginScreen(role: '', isLogin: true),
+        '/register': (context) => RegisterScreen(role: '',),
         '/home': (context) => HomePage(),
       },
       debugShowCheckedModeBanner: false,

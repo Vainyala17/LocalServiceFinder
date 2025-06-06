@@ -8,7 +8,9 @@ import 'AuthService.dart';
 import 'LoginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final String role;
+
+  const RegisterScreen({Key? key, required this.role}) : super(key: key);
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -47,11 +49,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               context: context,
               barrierDismissible: false,
               builder: (context) => Dialog(
-                backgroundColor: const Color(0xFFF3FBEF),
+                backgroundColor: widget.role == 'admin'
+                    ? const Color(0xFFFFF8E1)
+                    : const Color(0xFFF3FBEF),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                child: SingleChildScrollView( // 🔧 Wrap with scrollable widget
+                child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0), // Optional for safety
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -59,33 +63,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Container(
                           height: 100,
                           width: 100,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF4CAF50),
+                          decoration: BoxDecoration(
+                            color: widget.role == 'admin'
+                                ? const Color(0xFFFF9800)
+                                : const Color(0xFF4CAF50),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(Icons.check, color: Colors.white, size: 40),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           "SUCCESS",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF4CAF50),
+                            color: widget.role == 'admin'
+                                ? const Color(0xFFFF9800)
+                                : const Color(0xFF4CAF50),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                           child: Text(
-                            "Congratulations, your account has been successfully created.",
+                            "Congratulations, your ${widget.role} account has been successfully created.",
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                            style: const TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF4CAF50),
+                            backgroundColor: widget.role == 'admin'
+                                ? const Color(0xFFFF9800)
+                                : const Color(0xFF4CAF50),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -93,10 +103,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           onPressed: () {
                             Navigator.pop(context);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (_) => HomePage()),
-                            );
+                            // Navigate based on role
+                            if (widget.role == 'admin') {
+                              Navigator.pushReplacementNamed(context, '/admin_home');
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) => HomePage()),
+                              );
+                            }
                           },
                           child: const Text("Continue", style: TextStyle(color: Colors.white)),
                         ),
@@ -147,22 +162,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Dynamic colors based on role
+    Color primaryColor = widget.role == 'admin' ? const Color(0xFFFF9800) : const Color(0xFF4CAF50);
+    Color primaryColorLight = widget.role == 'admin' ? const Color(0xFFFFF3E0) : const Color(0xFFE8F5E8);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        iconTheme: IconThemeData(color: Colors.grey[600]),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-
-        // title: Text(
-        //   "Create Account",
-        //   style: TextStyle(
-        //     color: Theme.of(context).primaryColor,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
       ),
       body: SafeArea(
         child: Center(
@@ -175,11 +186,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    // Role indicator
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: primaryColorLight,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              widget.role == 'admin' ? Icons.admin_panel_settings : Icons.person,
+                              color: primaryColor,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '${widget.role.toUpperCase()} REGISTRATION',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
                     // Logo or illustration
                     Center(
                       child: Image.asset(
                         'assets/sign.png', // Add your logo to assets
-                        height: 150,
+                        height: 120,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -195,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Please fill in the details to create your account",
+                      "Create your ${widget.role} account to get started",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[600],
@@ -218,6 +260,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: primaryColor, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -259,6 +305,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Colors.grey[300]!),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: primaryColor, width: 2),
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -297,6 +347,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: Colors.grey[300]!),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: primaryColor, width: 2),
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -314,7 +368,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ElevatedButton(
                       onPressed: _isLoading ? null : () => _register(),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
+                        backgroundColor: primaryColor,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -353,7 +407,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(
+                                  role: widget.role,
+                                  isLogin: true,
+                                ),
+                              ),
                             );
                           },
                           child: Text(
@@ -361,7 +420,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF4CAF50),
+                              color: primaryColor,
                             ),
                           ),
                         ),
