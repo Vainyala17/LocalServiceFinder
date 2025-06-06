@@ -45,7 +45,4 @@ Ensure you have the following installed:
 - 🔥 **Backend**: Firebase
 - 🗄️ **Database**: Firestore
 
-## Contribution
-🚀 Contributions are welcome! Feel free to submit issues or pull requests.
-
 
