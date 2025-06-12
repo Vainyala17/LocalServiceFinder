@@ -7,12 +7,10 @@ import 'RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   final String role;
-  final bool isLogin;
 
   const LoginScreen({
     Key? key,
-    required this.role,
-    required this.isLogin
+    required this.role, required isLogin,
   }) : super(key: key);
 
   @override
@@ -62,42 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void register() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      User? user = await _auth.registerUser(emailController.text, passwordController.text);
-      if (user != null) {
-        // Navigate based on role after registration
-        if (widget.role == 'admin') {
-          Navigator.pushReplacementNamed(context, '/admin_home');
-        } else {
-          Navigator.pushReplacementNamed(context, '/home');
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Registration failed. Please try again."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error: ${e.toString()}"),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Dynamic colors based on role
@@ -121,36 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                // Role indicator
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: primaryColorLight,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          widget.role == 'admin' ? Icons.admin_panel_settings : Icons.person,
-                          color: primaryColor,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${widget.role.toUpperCase()} ${widget.isLogin ? 'LOGIN' : 'REGISTER'}',
-                          style: GoogleFonts.inter(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 30),
                 // Logo
                 Center(
@@ -164,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Welcome text
                 Center(
                   child: Text(
-                    widget.isLogin ? "Welcome back" : "Create Account",
+                    "Welcome back",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 28,
@@ -176,9 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 Center(
                   child: Text(
-                    widget.isLogin
-                        ? "Sign in to your ${widget.role} account"
-                        : "Create your ${widget.role} account",
+                    "Sign in to your ${widget.role} account",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 16,
@@ -264,36 +194,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 12),
-                // Forgot password (only show for login)
-                if (widget.isLogin)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
-                        );
-                      },
-                      child: Text(
-                        "Forgot Password?",
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: primaryColor,
-                        ),
+                // Forgot password
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                      );
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: primaryColor,
                       ),
                     ),
                   ),
+                ),
                 const SizedBox(height: 25),
-                // Login/Register button
+                // Login button
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: widget.isLogin ? login : register,
+                    onPressed: login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
@@ -303,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     child: Text(
-                      widget.isLogin ? "Login" : "Register",
+                      "Login",
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -312,13 +241,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Switch between login and register
+                // Switch to register
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      text: widget.isLogin
-                          ? "Don't have an account? "
-                          : "Already have an account? ",
+                      text: "Don't have an account? ",
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         color: const Color(0xFF6E6E6E),
@@ -327,19 +254,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         WidgetSpan(
                           child: InkWell(
                             onTap: () {
-                              // Navigate back to auth selection or switch mode
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LoginScreen(
+                                  builder: (context) => RegisterScreen(
                                     role: widget.role,
-                                    isLogin: !widget.isLogin,
                                   ),
                                 ),
                               );
                             },
                             child: Text(
-                              widget.isLogin ? "Sign Up" : "Sign In",
+                              "Sign Up",
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -355,89 +280,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String label,
-    required String hintText,
-    bool obscureText = false,
-    IconData? icon,
-    Widget? suffixIcon,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: const Color(0xFF333333),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFE5E5E5)),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: TextField(
-            controller: controller,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: const Color(0xFF333333),
-            ),
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: GoogleFonts.inter(
-                fontSize: 16,
-                color: const Color(0xFFAAAAAA),
-              ),
-              prefixIcon: icon != null
-                  ? Icon(
-                icon,
-                color: const Color(0xFF6E6E6E),
-              )
-                  : null,
-              suffixIcon: suffixIcon,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 16,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialButton({
-    required String icon,
-    required VoidCallback onPressed,
-  }) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFE5E5E5)),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Image.asset(
-            icon,
-            height: 24,
-            width: 24,
           ),
         ),
       ),

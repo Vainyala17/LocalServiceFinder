@@ -186,35 +186,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Role indicator
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: primaryColorLight,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              widget.role == 'admin' ? Icons.admin_panel_settings : Icons.person,
-                              color: primaryColor,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '${widget.role.toUpperCase()} REGISTRATION',
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: primaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                     const SizedBox(height: 20),
 
                     // Logo or illustration
